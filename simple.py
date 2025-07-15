@@ -5,12 +5,12 @@ import matplotlib.animation as animation
 from tqdm import tqdm
 
 
-u = 1 # this will become non-constant
+u = 4 # this will become non-constant
 s = 0.8
 
-nt = 500
-nx = 100
-ny = 25
+nt = 2000
+nx = 200
+ny = 40
 
 H = 1
 L = 10
