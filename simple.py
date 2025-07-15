@@ -43,7 +43,8 @@ for i in tqdm(range(1, nt)):
 fig, (ax, ax1) = plt.subplots(2, 1, figsize=(10, 8))
 
 im = ax.imshow(phi[0, :, :], extent=[0, L, 0, H])
-im2 = ax1.imshow(u[0, :, :], extent=[0, L, 0, H])
+im2 = ax1.imshow(u[1000, :, :], extent=[0, L, 0, H])
+im2.set_array(u[0, :, :])
 fill = ax.fill_between(np.linspace(0, L, nx), 0, h[0, :], color='red')
 fill2 = ax1.fill_between(np.linspace(0, L, nx), 0, h[0, :], color='red')
 ax.set_xlabel("x")
