@@ -34,14 +34,20 @@ print(f"udt/dx = {np.max(u)*dtau/dX}, s*dt/dy = {s*dtau/dxi}")
 h = np.zeros((ntau, nX))
 
 for i in tqdm(range(1, ntau)):
+    # previous time step
     phi[i, :, :] = phi[i - 1, :, :]
+    # -u phi_x
     phi[i, 1:, 1:] += - (u[i - 1, 1:, 1:]*dtau/dX) *(phi[i - 1, 1:, 1:] - phi[i - 1, 1:, :-1])
+    # -u_x phi
     phi[i, 1:, 1:] += - (phi[i - 1, 1:, 1:]*dtau/dX) *(u[i - 1, 1:, 1:] - u[i - 1, 1:, :-1])
+    # +s/(1-h) phi_y
     phi[i, 1:, 1:] += (s*dtau/(dxi*(1-h[i-1, 1:]))) * (phi[i - 1, :-1, 1:] - phi[i - 1, 1:, 1:])
+    # (phi_c - phi) h_t = J.n
     h[i, :] = h[i - 1, :] + s*dtau * phi[i-1, -1, :]/(phi_c - phi[i-1, -1, :])
+    # u = 1/1 - h
     u[i, :, :] = 1/(1 - h[i, :])
 
-fig, (ax, ax1) = plt.subplots(2, 1, figsize=(12, 8), tight_layout=True)
+fig, (ax, ax1) = plt.subplots(2, 1, figsize=(12, 4), tight_layout=True)
 
 xi = np.linspace(0, 1, nxi)
 X = np.linspace(0, L, nX)
