@@ -37,10 +37,8 @@ for i in tqdm(range(1, ntau)):
     phi[i, :, :] = phi[i - 1, :, :]
     phi[i, 1:, 1:] += - (u[i - 1, 1:, 1:]*dtau/dX) *(phi[i - 1, 1:, 1:] - phi[i - 1, 1:, :-1])
     phi[i, 1:, 1:] += - (phi[i - 1, 1:, 1:]*dtau/dX) *(u[i - 1, 1:, 1:] - u[i - 1, 1:, :-1])
-    phi[i, 1:, 1:] += (s*dtau/dxi) * (phi[i - 1, :-1, 1:] - phi[i - 1, 1:, 1:])
-    j = np.ceil((1 - h[i - 1, :])/dxi).astype(int)
-    all_ = np.arange(nX)
-    h[i, :] = h[i - 1, :] + s*dtau * phi[i-1, j-1, all_]/(phi_c - phi[i-1, j-1, all_])
+    phi[i, 1:, 1:] += (s*dtau/(dxi*(1-h[i-1, 1:]))) * (phi[i - 1, :-1, 1:] - phi[i - 1, 1:, 1:])
+    h[i, :] = h[i - 1, :] + s*dtau * phi[i-1, -1, :]/(phi_c - phi[i-1, -1, :])
     u[i, :, :] = 1/(1 - h[i, :])
 
 fig, (ax, ax1) = plt.subplots(2, 1, figsize=(12, 8), tight_layout=True)
