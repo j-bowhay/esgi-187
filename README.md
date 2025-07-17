@@ -35,7 +35,7 @@ Implements a more advanced 2D advection-diffusion equation with a dynamically ev
   - Moving boundary $h(x, t)$ as in `simple.py`, with additional terms for diffusion and velocity gradients.
   - Velocity: $u = \frac{1}{1 - h}$
 - **Numerical method:** Explicit finite difference (forward Euler in time, upwind for advection, central difference for diffusion).
-- **Physical context:** Captures more realistic transport and reaction in porous media, with evolving boundaries and variable flow.
+- **Physical context:** Captures both the advection and diffusion of the volume fraction.
 
 ### 4. `simple.mp4`
 A video output demonstrating the results of one of the simulations (possibly from `simple.py`).
