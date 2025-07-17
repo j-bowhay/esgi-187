@@ -42,6 +42,13 @@ for i in tqdm(range(1, ntau)):
     phi[i, 1:, 1:] += - (phi[i - 1, 1:, 1:]*dtau/dX) *(u[i - 1, 1:, 1:] - u[i - 1, 1:, :-1])
     # +s/(1-h) phi_y
     phi[i, 1:, 1:] += (s*dtau/(dxi*(1-h[i-1, 1:]))) * (phi[i - 1, :-1, 1:] - phi[i - 1, 1:, 1:])
+    # + D/(1-h)^2 phi_xixi
+    phi[i, 1:, 1:-1] += (0.01*dtau/(dxi**2*(1-h[i-1, 1:-1])**2)) * (phi[i - 1, 1:, 2:] - 2*phi[i - 1, 1:, 1:-1] + phi[i - 1, 1:, :-2])
+    # todo:
+    # - add boundary condition at the bottom for phi
+    # - properly set the diffusion coefficient
+    # - double check the if the equation for updating h needs to be changed
+    # - add the h_x / h_t terms
     # (phi_c - phi) h_t = J.n
     h[i, :] = h[i - 1, :] + s*dtau * phi[i-1, -1, :]/(phi_c - phi[i-1, -1, :])
     # u = 1/1 - h
@@ -74,5 +81,5 @@ def update(frame):
     u_plot = ax1.pcolormesh(X, h[frame, :] + (1 - h[frame, :])*xi, u[frame, :, :], clim=(0, umax))
     ax.set_title(f"Time: {frame * dtau:.2f}\n$\\phi$")
 
-ani = animation.FuncAnimation(fig, update, frames=np.arange(0, ntau, 50), interval=1)
+ani = animation.FuncAnimation(fig, update, frames=np.arange(0, ntau, 100), interval=1)
 plt.show()
