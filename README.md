@@ -17,7 +17,7 @@ Simulates the propagation of characteristics for a linear advection equation in 
 Solves a 2D advection equation with a moving boundary, representing the advance of a front (e.g., filtration or resin bed) in a porous medium. The velocity field and front position evolve according to the local concentration.
 
 - **Governing equations:**  
-  - Advection equation for $\phi$ (e.g., solute concentration or porosity):  
+  - Advection equation for the volume fraction$\phi$:  
     $\frac{\partial\phi}{\partial t} +\frac{\partial}{\partial x}(u\phi) +S\nabla\cdot(\boldsymbol{s}\phi) = 0$
   - Moving boundary $h(x, t)$ updated via a Stefan-like condition:  
     $\frac{\partial h}{\partial t} \propto \frac{\phi}{\phi_c - \phi}$
