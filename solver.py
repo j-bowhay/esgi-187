@@ -3,28 +3,35 @@ import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 from tqdm import tqdm
 
-# Problem parameters
-H = 1  # Pipe width (height)
-L = 5  # Pipe length
-T = 100  # Final time
+# Dimensional problem parameters
+H_dim = 0.1  # Pipe width (height)
+L_dim = 10.0  # Pipe length
+T_dim = 200  # Final time
+u_in_dim = 0.4  # Velocity inflow
+S_dim = 2e-2  # Sedimentation speed
+u_crit_dim = 2.0  # Critical fluid velocity (above which erosion occurs)
+phi_in = 0.15  # Volume fraction inflow
+phi_crit = 0.6  # Critical volume fraction
+
+H = 1.0  # Pipe width (height)
+L = 1.0  # Pipe length
+T = 100.0  # Final time
 aspect_ratio = H / L
 
-S = 4e-2  # Sedimentation speed
-u_in = 1.0  # Velocity inflow
-u_crit = 1.2  # Critical velocity
-phi_in = 0.2  # Volume fraction inflow
-phi_c = 0.6  # Critical volume fraction
+# Non-dimensionalised problem parameters
+S = S_dim / u_in_dim
+u_crit = u_crit_dim / u_in_dim  # Critical velocity
 
 representative_G = 1.0  # Sedimentation parameter
 representative_E = 1.0  # Erosion parameter
-G_const = representative_G / (aspect_ratio * u_in)
-E_const = representative_E / (aspect_ratio * u_in)
+# G_const = representative_G / (aspect_ratio * u_in)
+# E_const = representative_E / (aspect_ratio * u_in)
 
 G_const = S
-E_const = 0.9 * S
+E_const = 20.0 * u_in_dim**2
 
 # Discretisation parameters
-nt = 10000
+nt = 200000
 nx = 200
 ny = 40
 
@@ -34,7 +41,7 @@ dt = T / nt
 
 phi = np.zeros((nt, ny, nx))
 phi[:, :, 0] = phi_in  # Boundary condition at the left edge
-phi[:, 0, :] = 0 # Boundary condition at the top edge
+phi[:, 0, :] = 0  # Boundary condition at the top edge
 
 u = np.ones((nt, ny, nx))
 
@@ -61,8 +68,8 @@ for i in tqdm(range(1, nt)):
     # Update sediment height
     h[i, :] = (
         h[i - 1, :]
-        + dt * G_const * phi[i, j - 1, all_]
-        - dt * E_const * np.maximum(u[i - 1, j - 1, all_]**2 - u_crit**2, 0)**1.5
+        + dt / phi_crit * G_const * phi[i, j - 1, all_]
+        - dt / phi_crit * E_const * np.maximum(u[i - 1, j - 1, all_]**2 - u_crit**2, 0)**1.5
     )
 
     h_max[i] = np.max(h[i, :])
